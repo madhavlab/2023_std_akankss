@@ -6,15 +6,15 @@ from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
 import time
 
-def function1(search_db, dump_dir, file_type="flac", chkpt_path="/Users/akanksha/Downloads/vq-wav2vec.pt"):
-    # Step 1: Generate manifest file
-    os.system(f"python /Users/akanksha/new/fairseq/examples/wav2vec/wav2vec_manifest.py \
+def function1(search_db, dump_dir, file_type="flac", chkpt_path="./models/vq-wav2vec.pt"):
+    # Step 1: Generate manifest file using fairseq wav2vec_manifest function
+    os.system(f"python ./fairseq/examples/wav2vec/wav2vec_manifest.py \
         {search_db} \
         --dest {dump_dir} \
         --ext {file_type}")
 
-    # Step 2: Featurize audio files
-    os.system(f"python /Users/akanksha/new/fairseq/examples/wav2vec/vq-wav2vec_featurize.py \
+    # Step 2: Featurize audio files using fairseq vq-wav2vec_featurize function
+    os.system(f"python ./fairseq/examples/wav2vec/vq-wav2vec_featurize.py \
         --data-dir {dump_dir}  \
         --output-dir {dump_dir} \
         --checkpoint {chkpt_path} \
@@ -22,8 +22,8 @@ def function1(search_db, dump_dir, file_type="flac", chkpt_path="/Users/akanksha
         --extension tsv")
 
 if __name__ == "__main__" and False:
-    search_db = "/Users/akanksha/Downloads/ref/reference"
-    dump_dir = "/Users/akanksha/Downloads/ref/reference"
+    search_db = "https://www.openslr.org/resources/12/dev-clean.tar.gz" # Reference Audio database
+    dump_dir = "./ref/reference" # Path to the directory for saving the indices of reference audios
     function1(search_db, dump_dir)
 
 def read_text_data(file_path):
@@ -58,9 +58,9 @@ def function2(query_audio_path, dump_dir, K):
 
 # Example Usage:
 if __name__ == "__main__":
-    query_audio_path = "/Users/akanksha/Downloads/test_queries/query"
-    dump_directory = "/Users/akanksha/Desktop/pap_cai"
-    query_dir="/Users/akanksha/Downloads/test_queries/query"
+    query_audio_path = "./test_queries/query" # Path of short audios treated as queries to be tokenized using function1
+    dump_directory = "./dump/query" # Path to the directory for saving the indices of query audios
+    query_dir = "./test_queries/query" # Short audios treated as queries
     function1(query_audio_path, query_dir )
     top_k_matches, query_time = function2(query_audio_path, dump_directory, K=10)
     print("Top-K Matches:")
